@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace waterfallChutesAndLadders
+﻿namespace waterfallChutesAndLadders
 {
     internal class Dice
     {
+        public static int roll(int low, int high)
+        {
+            return 0;
+        }
     }
 }
