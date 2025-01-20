@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace waterfallChutesAndLadders
+﻿namespace waterfallChutesAndLadders
 {
     internal class Controller
     {
+        private List<Player> players;
+        private Game game;
+
+        public void draw()
+        {
+
+        }
+
+        public bool handle_input()
+        {
+            return false;
+        }
     }
 }
