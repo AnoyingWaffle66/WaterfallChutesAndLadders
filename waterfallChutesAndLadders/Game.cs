@@ -1,12 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace waterfallChutesAndLadders
+﻿namespace waterfallChutesAndLadders
 {
     internal class Game
     {
+        public Game()
+        {
+
+        }
+        private Tile[][] board;
+        public Tile[][] Board
+        {
+            get { return board; }
+        }
+
+        public void turn(Player player)
+        {
+
+        }
+
+        public void handle_tile(Player player, Tile tile)
+        {
+
+        }
     }
 }
