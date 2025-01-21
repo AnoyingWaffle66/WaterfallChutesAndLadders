@@ -23,14 +23,12 @@
         public int Go_to_position
         {
             get { return go_to_position; }
-            set { this.go_to_position = value; }
         }
     }
     public enum TileType
     {
         CHUTE,
         LADDER,
-        BLANK,
-        NONE
+        BLANK
     }
 }
