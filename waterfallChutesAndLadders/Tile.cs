@@ -29,6 +29,7 @@
     {
         CHUTE,
         LADDER,
-        BLANK
+        BLANK,
+        NONE
     }
 }
