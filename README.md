@@ -1,10 +1,11 @@
-git checkout -b branch_name
-// code some stuff
-git status
-git switch main
-git pull
-git switch branch_name
-git status
-git add . (or add specific files)
-git commit -m "commit message"
-git push -u origin
+git checkout -b branch_name <br />
+// code some stuff <br />
+git status <br />
+git add . (or add specific files) <br />
+git commit -m "commit message" <br />
+git switch main <br />
+git pull <br />
+git switch branch_name <br />
+git status <br />
+git push -u origin <br />
+// create pull request on GitHub
