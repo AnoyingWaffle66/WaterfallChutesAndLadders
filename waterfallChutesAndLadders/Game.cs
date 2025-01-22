@@ -4,10 +4,11 @@
     {
         public Game()
         {
-
+            board = new Tile[board_width, board_width];
         }
-        private Tile[][] board;
-        public Tile[][] Board
+        private int board_width = 10;
+        private Tile[,] board;
+        public Tile[,] Board
         {
             get { return board; }
         }
@@ -15,11 +16,18 @@
         public void turn(Player player)
         {
             // Update the current player's position via a roll of a six sided die.
+<<<<<<< HEAD
             player.Position = player.Position + Dice.roll();
+=======
+            // player.new_position(player.Position + Dice.roll());
+            int p_position = player.Position;
+            handle_tile(player, board[p_position / 10, p_position % 10]);
+>>>>>>> b9aa027 (fixed 2d array syntax and added default case)
         }
 
         public void handle_tile(Player player, Tile tile)
         {
+            bool won = false;
             switch (tile.Tile_type)
             {
                 case TileType.LADDER:
@@ -27,7 +35,10 @@
                     player.Position = tile.Go_to_position;
                     break;
                 case TileType.BLANK:
-                    check_won(player);
+                    won = check_won(player);
+                    break;
+                default:
+                    Console.WriteLine("Invalid TileType provided to handle_type method.");
                     break;
             }
         }
