@@ -6,7 +6,11 @@
         {
             board = new Tile[board_width, board_width];
         }
-        private int board_width = 10;
+        private const int board_width = 10;
+        public int Board_width
+        {
+            get { return board_width; }
+        }
         private Tile[,] board;
         public Tile[,] Board
         {
