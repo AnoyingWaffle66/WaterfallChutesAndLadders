@@ -14,7 +14,7 @@
             get { return position; }
             set
             {
-                position = value > 100 ? 100 : value;
+                position = value > 99 ? 99 : value;
             }
         }
 
