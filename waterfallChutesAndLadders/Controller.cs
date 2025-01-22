@@ -2,12 +2,22 @@
 {
     internal class Controller
     {
+        public Controller()
+        {
+            players = new List<Player>();
+            game = new Game();
+        }
+
         private List<Player> players;
         private Game game;
 
+        public static void start()
+        {
+            // fill with startup code logic
+        }
+
         public void draw()
         {
-            int test;
             //this is code
         }
 
