@@ -15,7 +15,7 @@
         public void turn(Player player)
         {
             // Update the current player's position via a roll of a six sided die.
-            // player.new_position(player.Position + Dice.roll());
+            player.Position = player.Position + Dice.roll();
         }
 
         public void handle_tile(Player player, Tile tile)
