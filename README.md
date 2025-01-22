@@ -6,6 +6,7 @@ git commit -m "commit message" <br />
 git switch main <br />
 git pull <br />
 git switch branch_name <br />
+git rebase main <br />
 git status <br />
-git push -u origin <br />
+git push -u origin branch_name <br />
 // create pull request on GitHub
