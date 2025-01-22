@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace waterfallChutesAndLadders
+﻿namespace waterfallChutesAndLadders
 {
     internal static class Dice
     {
@@ -25,7 +23,7 @@ namespace waterfallChutesAndLadders
 
             for (int i = 0; i < amount; i++)
             {
-                total += rand.Next(low, high + 1);
+                total += roll(low, high);
             }
 
             return total;
