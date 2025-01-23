@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace waterfallChutesAndLadders
+﻿namespace waterfallChutesAndLadders
 {
     internal static class Dice
     {
@@ -16,6 +14,19 @@ namespace waterfallChutesAndLadders
         {
             //Inputting roll(1, 6) will act as a six sided die.
             return rand.Next(low, high + 1);
+        }
+
+        public static int roll(int low, int high, int amount)
+        {
+            //Inputting roll(1, 6, 2) will act as a six sided die 2 times and return the total.
+            int total = 0;
+
+            for (int i = 0; i < amount; i++)
+            {
+                total += roll(low, high);
+            }
+
+            return total;
         }
     }
 }

@@ -4,7 +4,7 @@
     {
         public Player(string color)
         {
-            this.position = 0;
+            Position = 0;
             this.color = color;
         }
 
@@ -12,13 +12,10 @@
         public int Position
         {
             get { return position; }
-        }
-
-        /* This following method isn't in the document, but would be needed to update
-         * the player position as the game goes on. - Erik, implementing the dice roll. */
-        public void new_position(int position)
-        {
-            this.position = position;
+            set
+            {
+                position = value > 99 ? 99 : value;
+            }
         }
 
         private string color;
