@@ -5,6 +5,14 @@
         public Game()
         {
             board = new Tile[board_width, board_width];
+            //board = Controller.generate_board();
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    for (int j = 0; j < 10; j++)
+            //    {
+            //        Console.WriteLine("\n" + board[i, j].Tile_type.ToString() + " Activate position: " + board[i, j].Activate_position + " Go to position: " + board[i, j].Go_to_position);
+            //    }
+            //}
         }
         private const int board_width = 10;
         public int Board_width
