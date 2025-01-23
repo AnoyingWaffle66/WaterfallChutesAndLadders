@@ -7,4 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\AppDev\ConsoleIOLibrary\ConsoleIOLibrary\ConsoleIOLibrary.csproj" />
+  </ItemGroup>
+
 </Project>
