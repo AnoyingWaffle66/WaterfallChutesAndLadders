@@ -34,6 +34,11 @@
             {
                 for (int column = 0; column < board_width; column++)
                 {
+                    if (row == 0 && column == 0)
+                    {
+                        board_to_return[row, column] = new Tile(TileType.BLANK, 0, 0);
+                        continue;
+                    }
                     TileType type = TileType.BLANK;
                     switch (Dice.roll())
                     {
@@ -59,7 +64,7 @@
                             tile = new Tile(type, current_idx, current_idx);
                             break;
                         case TileType.CHUTE:
-                            tile = new Tile(type, Dice.roll(0, 97), current_idx);
+                            tile = new Tile(type, Dice.roll(1, 98), current_idx);
                             if (tile.Go_to_position > tile.Activate_position)
                             {
                                 temp = tile.Go_to_position;
@@ -68,7 +73,7 @@
                             }
                             break;
                         case TileType.LADDER:
-                            tile = new Tile(type, current_idx, Dice.roll(0, 98));
+                            tile = new Tile(type, current_idx, Dice.roll(1, 98));
                             if (tile.Go_to_position < tile.Activate_position)
                             {
                                 temp = tile.Go_to_position;
@@ -86,6 +91,7 @@
             {
                 for (int j = 0; j < board_width; j++)
                 {
+                    int idx = i * board_width + j;
                     int go_to = board_to_return[i, j].Go_to_position;
                     int activate = board_to_return[i, j].Activate_position;
                     TileType t_type = board_to_return[i, j].Tile_type;
