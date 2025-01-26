@@ -1,4 +1,5 @@
-﻿namespace waterfallChutesAndLadders
+﻿using CSC160_ConsoleMenu;
+namespace waterfallChutesAndLadders
 {
     internal class Controller
     {
