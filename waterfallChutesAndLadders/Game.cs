@@ -52,7 +52,7 @@
             }
         }
 
-        private bool check_won(Player player)
+        public bool check_won(Player player)
         {
             return player.Position == 99;
         }
