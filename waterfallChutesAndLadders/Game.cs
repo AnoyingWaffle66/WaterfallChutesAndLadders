@@ -25,10 +25,10 @@
             get { return board; }
         }
 
-        public void turn(Player player)
+        public void turn(Player player, int player_roll)
         {
             // Update the current player's position via a roll of a six sided die.
-            player.Position += Dice.roll();
+            player.Position += player_roll;
             int p_position = player.Position;
             handle_tile(player, board[p_position / board_width, p_position % board_width]);
 

@@ -37,34 +37,40 @@
                         player_color = Color.colors["yellow"];
                         break;
                     case 3:
-                        player_color = Color.colors["gray"];
+                        player_color = Color.colors["cyan"];
                         break;
                 }
                 players.Add(new Player(player_color));
             }
             int player_counter = 0;
+            int player_roll = 0;
+            string current_player_color = "";
             for (int turn_counter = 0; !game.check_won(players[player_counter]); turn_counter++)
             {
                 player_counter = turn_counter % player_count;
+                int previous_player = (player_counter - 1 + player_count) % player_count + 1;
+                current_player_color = players[player_counter].Color;
                 do
                 {
                     draw();
-                    Console.WriteLine("Player " + (player_counter + 1) + " press enter to roll");
+                    if (turn_counter != 0)
+                    {
+                        Console.WriteLine("Player " + (previous_player) + " rolled: " + player_roll);
+                    }
+                    Console.WriteLine(current_player_color + "Player " + (player_counter + 1) + Color.colors["reset"] + " press enter to roll");
                 } while (handle_input(Console.ReadLine(), ref player_count, playing: true));
-                game.turn(players[player_counter]);
+                player_roll = Dice.roll();
+                game.turn(players[player_counter], player_roll);
             }
             draw();
-            Console.WriteLine("Player " + (player_counter + 1) + " has won");
+            Console.WriteLine(current_player_color + "Player " + (player_counter + 1) + " has won" + Color.colors["reset"]);
 
         }
 
         public void draw()
         {
             Console.Clear();
-
-            // I researched how to use color codes and this is what I got.
-            // I'm not sure how to integrate it well with our current system, if we even can.
-            string reset = Color.colors["reset"]; // ANSI reset code.
+            string reset = Color.colors["reset"];
 
             // Displays in plaintext the players and their positions, in their relevant color.
             Console.Write("Positions: ");
@@ -86,18 +92,14 @@
             {
                 for (int col = 0; col < width; col++)
                 {
-                    Console.Write("--------");
+                    Console.Write("---------");
                 }
                 Console.WriteLine("-");
             }
 
             /* This helper method produces a fixed-width cell ignoring ANSI color codes
-               for length calculations, so columns stay aligned. I haven't done much
-               Regex or ANSI so I'll be honest this is something I barely understand. 
-               This needs work, since after I got this all done and tested I realized our  
-               diagram was 2x2. To compensate, for now it's 5 long in the interior to fit 
-               all the players and any potential 'C' or 'L' from chutes and ladders. */
-            string MakeCell(string content, int totalInnerWidth = 5)
+               for length calculations, so columns stay aligned. */
+            string MakeCell(string content, int totalInnerWidth = 6)
             {
                 // Strip ANSI codes for measuring visible length.
                 string noColor = System.Text.RegularExpressions.Regex
@@ -145,20 +147,7 @@
                 // Print one interior line at a time.
                 for (int col = 0; col < columns.Length; col++)
                 {
-                    Tile tile = board[row, columns[col]];
-
-                    // Make 'content' string to eventually append all cell data into.
                     string content = "";
-
-                    // If chute or ladder, color-code them.
-                    if (tile.Tile_type == TileType.CHUTE)
-                    {
-                        content = Color.colors["bright_magenta"] + "C" + reset; // Magenta.
-                    }
-                    else if (tile.Tile_type == TileType.LADDER)
-                    {
-                        content = Color.colors["magenta"] + "L" + reset; // Purple.
-                    }
 
                     /* Check for players on this tile, if so, add player and color to string list. */
                     List<string> playersHere = new List<string>();
@@ -166,7 +155,6 @@
                     {
                         if (players[p].Position == row * 10 + columns[col])
                         {
-                            // Just "P" in the player's color
                             playersHere.Add(players[p].Color + "P" + reset);
                         }
                     }
@@ -174,7 +162,7 @@
                     // Append the players if present.
                     if (playersHere.Count > 0)
                     {
-                        content += string.Join("", playersHere);
+                        content = string.Join("", playersHere);
                     }
 
                     // Get the text for the text ignoring the ANSI color stuff.
@@ -183,7 +171,26 @@
                     // Print box interior, for example: "| PP "
                     Console.Write("| " + cellText + " ");
                 }
-
+                Console.WriteLine("|");
+                for (int col = 0; col < columns.Length; col++)
+                {
+                    int idx = row * 10 + columns[col];
+                    Tile tile = board[row, columns[col]];
+                    string content = Color.colors["bright_red"] + (idx + 1) + reset;
+                    if (tile.Tile_type == TileType.CHUTE)
+                    {
+                        content += Color.colors["bright_magenta"];
+                        content += idx == tile.Activate_position ? " C" + (tile.Go_to_position + 1) : " c" + (tile.Activate_position + 1);
+                        content += reset;
+                    }
+                    else if (tile.Tile_type == TileType.LADDER)
+                    {
+                        content += Color.colors["gray"];
+                        content += idx == tile.Activate_position ? " L" + (tile.Go_to_position + 1) : " l" + (tile.Activate_position + 1);
+                        content += reset;
+                    }
+                    Console.Write("|" + MakeCell(content) + "  ");
+                }
                 // Right boundary for this row.
                 Console.WriteLine("|");
 
