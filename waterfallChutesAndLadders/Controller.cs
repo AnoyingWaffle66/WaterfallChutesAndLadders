@@ -12,77 +12,18 @@ namespace waterfallChutesAndLadders
         private List<Player> players;
         private Game game;
 
-        public void start()
+        public static void start()
         {
             // fill with startup code logic
-            int player_count = 2;
-            do
-            {
-                Console.WriteLine("Enter player count (2-4)");
-            } while (handle_input(Console.ReadLine(), ref player_count, integer_prompt: true, min: 2, max: 4));
-
-            Console.WriteLine(player_count);
-
-            for (int i = 0; i < player_count; i++)
-            {
-                string player_color = "";
-                switch (i)
-                {
-                    case 0:
-                        player_color = Color.colors["red"];
-                        break;
-                    case 1:
-                        player_color = Color.colors["green"];
-                        break;
-                    case 2:
-                        player_color = Color.colors["yellow"];
-                        break;
-                    case 3:
-                        player_color = Color.colors["yellow"];
-                        break;
-                }
-                players.Add(new Player(player_color));
-            }
-            int player_counter = 0;
-            for (int turn_counter = 0; !game.check_won(players[player_counter]); turn_counter++)
-            {
-                player_counter = turn_counter % player_count;
-                do
-                {
-                    draw();
-                    Console.WriteLine("Player " + (player_counter + 1) + " press enter to roll");
-                } while (handle_input(Console.ReadLine(), ref player_count, playing: true));
-                game.turn(players[player_counter]);
-            }
-
-            Console.WriteLine("Player " + (player_counter + 1) + " has won");
-
         }
 
         public void draw()
         {
-            foreach (Player player in players)
-            {
-                Console.WriteLine("Player position " + player.Position);
-            }
+            //this is code
         }
 
-        public bool handle_input(string input, ref int player_count, bool playing = false, bool integer_prompt = false, int min = 0, int max = 1)
+        public bool handle_input()
         {
-            if (playing)
-            {
-                return !string.IsNullOrEmpty(input);
-            }
-
-            if (integer_prompt)
-            {
-                if (!int.TryParse(input, out player_count) || player_count > max || player_count < min)
-                {
-                    Console.WriteLine("Bad input");
-                    return true;
-                }
-            }
-
             return false;
         }
 
@@ -99,28 +40,19 @@ namespace waterfallChutesAndLadders
                         board_to_return[row, column] = new Tile(TileType.BLANK, 0, 0);
                         continue;
                     }
-                    if (row == 9 && column == 9)
-                    {
-                        board_to_return[row, column] = new Tile(TileType.BLANK, 99, 99);
-                        continue;
-                    }
                     TileType type = TileType.BLANK;
-                    switch (Dice.roll(1, 10))
+                    switch (Dice.roll())
                     {
                         case 1:
                         case 2:
                         case 3:
                         case 4:
-                        case 5:
-                        case 6:
-                        case 7:
-                        case 8:
                             type = TileType.BLANK;
                             break;
-                        case 9:
+                        case 5:
                             type = TileType.CHUTE;
                             break;
-                        case 10:
+                        case 6:
                             type = TileType.LADDER;
                             break;
                     }
@@ -133,7 +65,7 @@ namespace waterfallChutesAndLadders
                             tile = new Tile(type, current_idx, current_idx);
                             break;
                         case TileType.CHUTE:
-                            tile = new Tile(type, Dice.roll(1, 97), current_idx);
+                            tile = new Tile(type, Dice.roll(1, 98), current_idx);
                             if (tile.Go_to_position > tile.Activate_position)
                             {
                                 temp = tile.Go_to_position;
