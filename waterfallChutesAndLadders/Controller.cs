@@ -164,16 +164,6 @@
                     List<string> playersHere = new List<string>();
                     for (int p = 0; p < players.Count; p++)
                     {
-                        switch (tile.Tile_type)
-                        {
-                            case TileType.CHUTE:
-
-                                break;
-                            case TileType.LADDER:
-
-                                break;
-                            case TileType.BLANK: break;
-                        }
                         if (players[p].Position == row * 10 + columns[col])
                         {
                             // Just "P" in the player's color
