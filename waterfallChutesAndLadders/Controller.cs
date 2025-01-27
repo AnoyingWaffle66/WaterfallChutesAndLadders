@@ -1,6 +1,6 @@
 ﻿namespace waterfallChutesAndLadders
 {
-    internal class Controller
+    public class Controller
     {
         public Controller()
         {

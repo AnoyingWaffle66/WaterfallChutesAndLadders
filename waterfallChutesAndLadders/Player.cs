@@ -1,6 +1,6 @@
 ﻿namespace waterfallChutesAndLadders
 {
-    internal class Player
+    public class Player
     {
         public Player(string color)
         {
