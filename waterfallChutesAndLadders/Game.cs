@@ -1,6 +1,6 @@
 ﻿namespace waterfallChutesAndLadders
 {
-    internal class Game
+    public class Game
     {
         public Game()
         {
