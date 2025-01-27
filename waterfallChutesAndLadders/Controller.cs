@@ -37,7 +37,7 @@
                         player_color = Color.colors["yellow"];
                         break;
                     case 3:
-                        player_color = Color.colors["yellow"];
+                        player_color = Color.colors["gray"];
                         break;
                 }
                 players.Add(new Player(player_color));
@@ -60,11 +60,143 @@
 
         public void draw()
         {
-            foreach (Player player in players)
+            Console.Clear();
+
+            // I researched how to use color codes and this is what I got.
+            // I'm not sure how to integrate it well with our current system, if we even can.
+            string reset = "\u001b[0m"; // ANSI reset code.
+
+            // Displays in plaintext the players and their positions, in their relevant color.
+            Console.Write("Positions: ");
+            for (int i = 0; i < players.Count; i++)
             {
-                Console.WriteLine("Player position " + player.Position);
+                Console.Write(players[i].Color +
+                              $"Player {i + 1} position: {players[i].Position + 1}" + reset);
+                if (i < players.Count - 1) Console.Write(", ");
             }
+            Console.WriteLine("\n");
+
+            // Get the boards and tiles.
+            Tile[,] board = game.Board;
+            int width = game.Board_width;
+
+            // Print the top and bottoms of each rows. This needs to be adjusted
+            // if the totalInnerWidth of the MakeCell function changes.
+            void PrintHorizontalBoundary()
+            {
+                for (int col = 0; col < width; col++)
+                {
+                    Console.Write("--------");
+                }
+                Console.WriteLine("-");
+            }
+
+            /* This helper method produces a fixed-width cell ignoring ANSI color codes
+               for length calculations, so columns stay aligned. I haven't done much
+               Regex or ANSI so I'll be honest this is something I barely understand. 
+               This needs work, since after I got this all done and tested I realized our  
+               diagram was 2x2. To compensate, for now it's 5 long in the interior to fit 
+               all the players and any potential 'C' or 'L' from chutes and ladders. */
+            string MakeCell(string content, int totalInnerWidth = 5)
+            {
+                // Strip ANSI codes for measuring visible length.
+                string noColor = System.Text.RegularExpressions.Regex
+                    .Replace(content, @"\u001b\[[0-9;]*m", "");
+
+                // If the visible text is longer than totalInnerWidth, truncate.
+                if (noColor.Length > totalInnerWidth)
+                {
+                    // Truncate just the visible text.
+                    noColor = noColor.Substring(0, totalInnerWidth);
+                    return noColor;
+                }
+                else
+                {
+                    // If it fits, keep the original (with color) and pad with spaces.
+                    int padCount = totalInnerWidth - noColor.Length;
+                    return content + new string(' ', padCount);
+                }
+            }
+
+            // Prints out the top row boundary of the board.
+            PrintHorizontalBoundary();
+
+            // This is the part that allows the board to "snake" while printing
+            // out all the rows. It essentially goes back and forth after each ten
+            // tiles and reverses the direction of the printing using modulus.
+            for (int row = 9; row >= 0; row--)
+            {
+                int bottomRowIndex = 9 - row;
+
+                int[] columns;
+                if (bottomRowIndex % 2 == 1)
+                {
+                    // Odd: Left to right.
+                    columns = new int[width];
+                    for (int c = 0; c < width; c++) columns[c] = c;
+                }
+                else
+                {
+                    // Even: Right to left.
+                    columns = new int[width];
+                    for (int c = 0; c < width; c++) columns[c] = width - 1 - c;
+                }
+
+                // Print one interior line at a time.
+                foreach (int col in columns)
+                {
+                    Tile tile = board[row, col];
+
+                    // Make 'content' string to eventually append all cell data into.
+                    string content = "";
+
+                    // If chute or ladder, color-code them.
+                    if (tile.Tile_type == TileType.CHUTE)
+                    {
+                        content = "\u001b[95mC\u001b[0m"; // Magenta.
+                    }
+                    else if (tile.Tile_type == TileType.LADDER)
+                    {
+                        content = "\u001b[35mL\u001b[0m"; // Purple.
+                    }
+
+                    /* Check for players on this tile, if so, add player and color to string list.
+                       However, it does not see players on a chute or ladder tile. The commented out
+                       code in there will display the player on a chute/ladder tile, however it'll
+                       display it on both ends. I'm not sure how to limit it to just the actual tile. */
+                    List<string> playersHere = new List<string>();
+                    for (int p = 0; p < players.Count; p++)
+                    {
+                        if (players[p].Position == tile.Activate_position /*|| players[p].Position == tile.Go_to_position*/)
+                        {
+                            // Just "P" in the player's color
+                            playersHere.Add(players[p].Color + "P" + reset);
+                        }
+                    }
+
+                    // Append the players if present.
+                    if (playersHere.Count > 0)
+                    {
+                        content += string.Join("", playersHere);
+                    }
+
+                    // Get the text for the text ignoring the ANSI color stuff.
+                    string cellText = MakeCell(content);
+
+                    // Print box interior, for example: "| PP "
+                    Console.Write("| " + cellText + " ");
+                }
+
+                // Right boundary for this row.
+                Console.WriteLine("|");
+
+                // Bottom boundary of this row.
+                PrintHorizontalBoundary();
+            }
+
+            // Should be fully displayed.
         }
+
 
         public bool handle_input(string input, ref int player_count, bool playing = false, bool integer_prompt = false, int min = 0, int max = 1)
         {

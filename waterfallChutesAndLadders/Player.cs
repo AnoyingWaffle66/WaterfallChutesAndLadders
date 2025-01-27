@@ -19,7 +19,7 @@
         }
 
         private string color;
-        private string Color
+        public string Color
         {
             get { return color; }
         }
