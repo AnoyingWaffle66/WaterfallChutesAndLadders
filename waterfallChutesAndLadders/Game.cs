@@ -44,7 +44,6 @@
                     player.Position = tile.Go_to_position;
                     break;
                 case TileType.BLANK:
-                    won = check_won(player);
                     break;
                 default:
                     Console.WriteLine("Invalid TileType provided to handle_type method.");
