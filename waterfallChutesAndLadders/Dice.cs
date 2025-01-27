@@ -1,6 +1,6 @@
 ﻿namespace waterfallChutesAndLadders
 {
-    internal static class Dice
+    public static class Dice
     {
         private static Random rand = new Random();
 

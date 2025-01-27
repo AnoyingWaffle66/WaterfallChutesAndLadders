@@ -1,6 +1,6 @@
 ﻿namespace waterfallChutesAndLadders
 {
-    internal class Tile
+    public class Tile
     {
         public Tile() { }
         public Tile(TileType tile_type, int activate_position, int go_to_position)
