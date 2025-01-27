@@ -28,7 +28,7 @@
                 switch (i)
                 {
                     case 0:
-                        player_color = Color.colors["red"];
+                        player_color = Color.colors["bright_white"];
                         break;
                     case 1:
                         player_color = Color.colors["green"];
@@ -185,7 +185,7 @@
                     }
                     else if (tile.Tile_type == TileType.LADDER)
                     {
-                        content += Color.colors["gray"];
+                        content += Color.colors["yellow"];
                         content += idx == tile.Activate_position ? " L" + (tile.Go_to_position + 1) : " l" + (tile.Activate_position + 1);
                         content += reset;
                     }
