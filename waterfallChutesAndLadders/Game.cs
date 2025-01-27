@@ -28,7 +28,7 @@
         public void turn(Player player)
         {
             // Update the current player's position via a roll of a six sided die.
-            player.Position = player.Position + Dice.roll();
+            player.Position += Dice.roll();
             int p_position = player.Position;
             handle_tile(player, board[p_position / board_width, p_position % board_width]);
 
@@ -36,7 +36,6 @@
 
         public void handle_tile(Player player, Tile tile)
         {
-            bool won = false;
             switch (tile.Tile_type)
             {
                 case TileType.LADDER:

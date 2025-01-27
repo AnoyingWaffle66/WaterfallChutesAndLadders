@@ -53,7 +53,7 @@
                 } while (handle_input(Console.ReadLine(), ref player_count, playing: true));
                 game.turn(players[player_counter]);
             }
-
+            draw();
             Console.WriteLine("Player " + (player_counter + 1) + " has won");
 
         }
@@ -64,7 +64,7 @@
 
             // I researched how to use color codes and this is what I got.
             // I'm not sure how to integrate it well with our current system, if we even can.
-            string reset = "\u001b[0m"; // ANSI reset code.
+            string reset = Color.colors["reset"]; // ANSI reset code.
 
             // Displays in plaintext the players and their positions, in their relevant color.
             Console.Write("Positions: ");
@@ -143,9 +143,9 @@
                 }
 
                 // Print one interior line at a time.
-                foreach (int col in columns)
+                for (int col = 0; col < columns.Length; col++)
                 {
-                    Tile tile = board[row, col];
+                    Tile tile = board[row, columns[col]];
 
                     // Make 'content' string to eventually append all cell data into.
                     string content = "";
@@ -153,21 +153,18 @@
                     // If chute or ladder, color-code them.
                     if (tile.Tile_type == TileType.CHUTE)
                     {
-                        content = "\u001b[95mC\u001b[0m"; // Magenta.
+                        content = Color.colors["bright_magenta"] + "C" + reset; // Magenta.
                     }
                     else if (tile.Tile_type == TileType.LADDER)
                     {
-                        content = "\u001b[35mL\u001b[0m"; // Purple.
+                        content = Color.colors["magenta"] + "L" + reset; // Purple.
                     }
 
-                    /* Check for players on this tile, if so, add player and color to string list.
-                       However, it does not see players on a chute or ladder tile. The commented out
-                       code in there will display the player on a chute/ladder tile, however it'll
-                       display it on both ends. I'm not sure how to limit it to just the actual tile. */
+                    /* Check for players on this tile, if so, add player and color to string list. */
                     List<string> playersHere = new List<string>();
                     for (int p = 0; p < players.Count; p++)
                     {
-                        if (players[p].Position == tile.Activate_position /*|| players[p].Position == tile.Go_to_position*/)
+                        if (players[p].Position == row * 10 + columns[col])
                         {
                             // Just "P" in the player's color
                             playersHere.Add(players[p].Color + "P" + reset);
@@ -236,23 +233,16 @@
                         continue;
                     }
                     TileType type = TileType.BLANK;
-                    switch (Dice.roll(1, 10))
+                    switch (Dice.roll(1, 20))
                     {
                         case 1:
-                        case 2:
-                        case 3:
-                        case 4:
-                        case 5:
-                        case 6:
-                        case 7:
-                        case 8:
-                            type = TileType.BLANK;
-                            break;
-                        case 9:
                             type = TileType.CHUTE;
                             break;
-                        case 10:
+                        case 2:
                             type = TileType.LADDER;
+                            break;
+                        default:
+                            type = TileType.BLANK;
                             break;
                     }
                     int current_idx = row * board_width + column;
