@@ -17,8 +17,8 @@
             int player_count = 2;
             do
             {
-                Console.WriteLine("Enter player count (1-4)");
-            } while (handle_input(Console.ReadLine(), ref player_count, integer_prompt: true, min: 1, max: 4));
+                Console.WriteLine("Enter player count (2-4)");
+            } while (handle_input(Console.ReadLine(), ref player_count, integer_prompt: true, min: 2, max: 4));
 
             Console.WriteLine(player_count);
 
@@ -43,12 +43,15 @@
                 players.Add(new Player(player_color));
             }
             int player_counter = 0;
-            for (int turn_counter = 0; !game.check_won(players[player_counter]);)
+            for (int turn_counter = 0; !game.check_won(players[player_counter]); turn_counter++)
             {
-                game.turn(players[player_counter]);
-                draw();
-                turn_counter++;
                 player_counter = turn_counter % player_count;
+                do
+                {
+                    draw();
+                    Console.WriteLine("Player " + (player_counter + 1) + " press enter to roll");
+                } while (handle_input(Console.ReadLine(), ref player_count, playing: true));
+                game.turn(players[player_counter]);
             }
 
             Console.WriteLine("Player " + (player_counter + 1) + " has won");
@@ -61,7 +64,6 @@
             {
                 Console.WriteLine("Player position " + player.Position);
             }
-            //this is code
         }
 
         public bool handle_input(string input, ref int player_count, bool playing = false, bool integer_prompt = false, int min = 0, int max = 1)
@@ -83,65 +85,6 @@
             return false;
         }
 
-        public static int PromptForMenuSelection(IEnumerable<string> options, bool withQuit)
-        {
-            int select = -1;
-            int min = 1;
-            for (int i = 0; i < options.Count(); i++)
-            {
-                Console.WriteLine($"{i + 1}. {options.ElementAt(i)}");
-            }
-            if (withQuit)
-            {
-                min = 0;
-                Console.WriteLine("\n 0.Quit\n");
-            }
-            do
-            {
-                select = PromptForInt("what is your choice", min, options.Count());
-            } while (select == -1);
-            return select;
-        }
-        public static int PromptForInt(string prompt, int min, int max)
-        {
-            int m = -1;
-            bool b = false;
-            if (min > max) { throw new ArgumentException("min can not be greater than max"); }
-            do
-            {
-                string s = PromptForInput(prompt, false);
-                b = int.TryParse(s, out m);
-                if (!b)
-                {
-                    Console.WriteLine("please insert vaild int");
-                }
-                else
-                {
-                    if (m < min || m > max)
-                    {
-                        Console.WriteLine($"invalid input please insert a value between {min} and {max}");
-                    }
-                }
-            } while (!b);
-            return m;
-        }
-        public static string PromptForInput(string prompt, bool allowEmpty)
-        {
-            string s = null;
-            if (string.IsNullOrWhiteSpace(prompt)) { throw new ArgumentException("promt can not be null, Whitespace, or empty"); }
-            do
-            {
-                Console.Write(prompt);
-                s = Console.ReadLine();
-                if (string.IsNullOrEmpty(s) && !allowEmpty)
-                {
-                    Console.WriteLine("input ivalid");
-                    continue;
-                }
-            } while (s == null);
-            return s;
-        }
-
         public static Tile[,] generate_board()
         {
             const int board_width = 10;
@@ -155,19 +98,28 @@
                         board_to_return[row, column] = new Tile(TileType.BLANK, 0, 0);
                         continue;
                     }
+                    if (row == 9 && column == 9)
+                    {
+                        board_to_return[row, column] = new Tile(TileType.BLANK, 99, 99);
+                        continue;
+                    }
                     TileType type = TileType.BLANK;
-                    switch (Dice.roll())
+                    switch (Dice.roll(1, 10))
                     {
                         case 1:
                         case 2:
                         case 3:
                         case 4:
+                        case 5:
+                        case 6:
+                        case 7:
+                        case 8:
                             type = TileType.BLANK;
                             break;
-                        case 5:
+                        case 9:
                             type = TileType.CHUTE;
                             break;
-                        case 6:
+                        case 10:
                             type = TileType.LADDER;
                             break;
                     }
@@ -180,7 +132,7 @@
                             tile = new Tile(type, current_idx, current_idx);
                             break;
                         case TileType.CHUTE:
-                            tile = new Tile(type, Dice.roll(1, 98), current_idx);
+                            tile = new Tile(type, Dice.roll(1, 97), current_idx);
                             if (tile.Go_to_position > tile.Activate_position)
                             {
                                 temp = tile.Go_to_position;
