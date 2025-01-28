@@ -27,25 +27,31 @@
 
         }
 
-        public void handle_tile(Player player, Tile tile, int player_roll)
+        public static void handle_tile(Player player, Tile tile, int player_roll, bool ignore_console = false)
         {
             switch (tile.Tile_type)
             {
                 case TileType.LADDER:
                     if (player.Position == tile.Activate_position)
                     {
-                        Console.WriteLine($"You've landed on a ladder by rolling a {player_roll}! You're moving up to position {tile.Go_to_position + 1}");
-                        Console.WriteLine("Press enter to continue!");
-                        Console.ReadLine();
+                        if (!ignore_console)
+                        {
+                            Console.WriteLine($"You've landed on a ladder by rolling a {player_roll}! You're moving up to position {tile.Go_to_position + 1}");
+                            Console.WriteLine("Press enter to continue!");
+                            Console.ReadLine();
+                        }
                         player.Position = tile.Go_to_position;
                     }
                     break;
                 case TileType.CHUTE:
                     if (player.Position == tile.Activate_position)
                     {
-                        Console.WriteLine($"You've landed on a chute by rolling a {player_roll}! You're moving down to position {tile.Go_to_position + 1}");
-                        Console.WriteLine("Press enter to continue!");
-                        Console.ReadLine();
+                        if (!ignore_console)
+                        {
+                            Console.WriteLine($"You've landed on a chute by rolling a {player_roll}! You're moving down to position {tile.Go_to_position + 1}");
+                            Console.WriteLine("Press enter to continue!");
+                            Console.ReadLine();
+                        }
                         player.Position = tile.Go_to_position;
                     }
                     break;
