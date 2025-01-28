@@ -72,6 +72,7 @@ public class Controller
             Console.WriteLine(current_player_color + "Player " + (player_counter + 1) + " has won" + Color.colors["reset"]);
             Console.WriteLine("Press enter to continue");
             while (handle_input(Console.ReadLine(), ref player_count, playing: true)) { }
+            Console.Clear();
             int menu_choice = 0;
             bool menu_selected = false;
             while (!menu_selected)
