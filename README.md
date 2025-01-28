@@ -1,16 +1,3 @@
-git checkout -b branch_name <br />
-// code some stuff <br />
-git status <br />
-git add . (or add specific files) <br />
-git commit -m "commit message" <br />
-git switch main <br />
-git pull <br />
-git switch branch_name <br />
-git rebase main <br />
-git status <br />
-git push -u origin branch_name <br />
-//Create pull request on GitHub <br />
-
 to run the Chutes And Ladders console app you need to. REQUIREMENTS: You need an IDE capable of running .net such as Microsoft Visual Studio <br />
 1. download the zip under the code button on GitHub <br />
 2. unzip the file to wherever you want it located <br />
