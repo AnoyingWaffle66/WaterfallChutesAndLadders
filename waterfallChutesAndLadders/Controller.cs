@@ -30,32 +30,14 @@ public class Controller
 
             for (int i = 0; i < player_count; i++)
             {
-                string player_color = "";
-                switch (i)
-                {
-                    case 0:
-                        player_color = Color.colors["bright_white"];
-                        break;
-                    case 1:
-                        player_color = Color.colors["green"];
-                        break;
-                    case 2:
-                        player_color = Color.colors["yellow"];
-                        break;
-                    case 3:
-                        player_color = Color.colors["cyan"];
-                        break;
-                }
-                players.Add(new Player(player_color));
+                players.Add(new Player());
             }
             int player_counter = 0;
             int player_roll = 0;
-            string current_player_color = "";
             for (int turn_counter = 0; !game.check_won(players[player_counter]); turn_counter++)
             {
                 player_counter = turn_counter % player_count;
                 int previous_player = (player_counter - 1 + player_count) % player_count + 1;
-                current_player_color = players[player_counter].Color;
                 do
                 {
                     draw();
@@ -63,13 +45,13 @@ public class Controller
                     {
                         Console.WriteLine("Player " + (previous_player) + " rolled: " + player_roll);
                     }
-                    Console.WriteLine(current_player_color + "Player " + (player_counter + 1) + Color.colors["reset"] + " press enter to roll");
+                    Console.WriteLine("Player " + (player_counter + 1) + " press enter to roll");
                 } while (handle_input(Console.ReadLine(), ref player_count, playing: true));
                 player_roll = Dice.roll();
                 game.turn(players[player_counter], player_roll);
             }
             draw();
-            Console.WriteLine(current_player_color + "Player " + (player_counter + 1) + " has won" + Color.colors["reset"]);
+            Console.WriteLine("Player " + (player_counter + 1) + " has won");
             Console.WriteLine("Press enter to continue");
             while (handle_input(Console.ReadLine(), ref player_count, playing: true)) { }
             Console.Clear();
@@ -101,14 +83,13 @@ public class Controller
     public void draw()
     {
         Console.Clear();
-        string reset = Color.colors["reset"];
 
         // Displays in plaintext the players and their positions, in their relevant color.
         Console.Write("Positions: ");
         for (int i = 0; i < players.Count; i++)
         {
-            Console.Write(players[i].Color +
-                          $"Player {i + 1} position: {players[i].Position + 1}" + reset);
+            Console.Write(
+                          $"Player {i + 1} position: {players[i].Position + 1}");
             if (i < players.Count - 1) Console.Write(", ");
         }
         Console.WriteLine("\n");
@@ -186,7 +167,7 @@ public class Controller
                 {
                     if (players[p].Position == row * 10 + columns[col])
                     {
-                        playersHere.Add(players[p].Color + "P" + reset);
+                        playersHere.Add( "P");
                     }
                 }
 
@@ -207,18 +188,14 @@ public class Controller
             {
                 int idx = row * 10 + columns[col];
                 Tile tile = board[row, columns[col]];
-                string content = Color.colors["bright_red"] + (idx + 1) + reset;
+                string content = "" + (idx + 1);
                 if (tile.Tile_type == TileType.CHUTE)
                 {
-                    content += Color.colors["bright_magenta"];
                     content += idx == tile.Activate_position ? " C" + (tile.Go_to_position + 1) : ""/*" c" + (tile.Activate_position + 1)*/;
-                    content += reset;
                 }
                 else if (tile.Tile_type == TileType.LADDER)
                 {
-                    content += Color.colors["yellow"];
                     content += idx == tile.Activate_position ? " L" + (tile.Go_to_position + 1) : ""/*" l" + (tile.Activate_position + 1)*/;
-                    content += reset;
                 }
                 Console.Write("|" + MakeCell(content) + "  ");
             }
@@ -341,7 +318,7 @@ public class Controller
                     activate_tile.Tile_type = t_type;
                 }
             }
-            tester = new Player("");
+            tester = new Player();
             for (int turn = 0; turn < 35; turn++)
             {
                 int position = Dice.roll();

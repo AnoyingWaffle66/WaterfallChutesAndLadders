@@ -2,10 +2,9 @@
 {
     public class Player
     {
-        public Player(string color)
+        public Player()
         {
             Position = 0;
-            this.color = color;
         }
 
         private int position;
@@ -16,12 +15,6 @@
             {
                 position = value > 99 ? 99 : value;
             }
-        }
-
-        private string color;
-        public string Color
-        {
-            get { return color; }
         }
     }
 }
